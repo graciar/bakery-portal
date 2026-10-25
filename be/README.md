@@ -47,11 +47,6 @@ php artisan serve
 ```
 The server will start at **`http://127.0.0.1:8000`**.
 
-### 5. Run Test Suite
-```bash
-php artisan test
-```
-
 ---
 
 ## API Endpoints Summary
