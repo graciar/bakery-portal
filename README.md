@@ -75,12 +75,6 @@ php artisan serve
 ```
 The backend API will run on **`http://127.0.0.1:8000`**.
 
-### Step 1.6: Run Tests (Optional)
-Run the automated test suite to verify all CRUD endpoints and business rules:
-```bash
-php artisan test
-```
-
 ---
 
 ## 2. Frontend Setup (`fe`)
