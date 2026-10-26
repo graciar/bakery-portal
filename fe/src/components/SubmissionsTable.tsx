@@ -210,7 +210,7 @@ export const SubmissionsTable: FC<SubmissionsTableProps> = ({
                 <th className="py-3.5 px-4">Name</th>
                 <th className="py-3.5 px-4">Store Name</th>
                 <th className="py-3.5 px-4">Tier</th>
-                <th className="py-3.5 px-4">Category</th>
+                <th className="py-3.5 px-4">Product</th>
                 <th className="py-3.5 px-4">Date</th>
                 <th className="py-3.5 px-4 text-center w-20">Actions</th>
               </tr>

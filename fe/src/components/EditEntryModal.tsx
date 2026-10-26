@@ -140,7 +140,6 @@ export const EditEntryModal: FC<EditEntryModalProps> = ({
     try {
       await updateSubmission(entry.id, {
         name: name.trim(),
-        customer_name: name.trim(),
         store_id: Number(selectedStoreId),
         product_id: Number(selectedProductId),
       })
@@ -212,11 +211,10 @@ export const EditEntryModal: FC<EditEntryModalProps> = ({
                   if (fieldErrors.name) setFieldErrors((prev) => ({ ...prev, name: '' }))
                 }}
                 placeholder="Customer Name"
-                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 transition-all ${
-                  fieldErrors.name
+                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 transition-all ${fieldErrors.name
                     ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500 bg-rose-50/20'
                     : 'border-slate-300 focus:ring-amber-500/20 focus:border-amber-500 bg-white'
-                }`}
+                  }`}
               />
             </div>
             {fieldErrors.name && (
@@ -248,13 +246,12 @@ export const EditEntryModal: FC<EditEntryModalProps> = ({
                   setSelectedStoreId(e.target.value)
                   if (fieldErrors.store_id) setFieldErrors((prev) => ({ ...prev, store_id: '' }))
                 }}
-                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 transition-all cursor-pointer ${
-                  loadingStores
+                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm text-slate-900 focus:outline-none focus:ring-2 transition-all cursor-pointer ${loadingStores
                     ? 'border-slate-200 bg-slate-50 text-slate-400 cursor-wait'
                     : fieldErrors.store_id
-                    ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500 bg-rose-50/20'
-                    : 'border-slate-300 focus:ring-amber-500/20 focus:border-amber-500 bg-white'
-                }`}
+                      ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500 bg-rose-50/20'
+                      : 'border-slate-300 focus:ring-amber-500/20 focus:border-amber-500 bg-white'
+                  }`}
               >
                 <option value="">-- Choose Store ({stores.length} available) --</option>
                 {stores.map((s) => (
@@ -308,24 +305,23 @@ export const EditEntryModal: FC<EditEntryModalProps> = ({
                   setSelectedProductId(e.target.value)
                   if (fieldErrors.product_id) setFieldErrors((prev) => ({ ...prev, product_id: '' }))
                 }}
-                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm transition-all ${
-                  !selectedStoreId
+                className={`w-full pl-10 pr-3.5 py-2.5 rounded-xl border text-sm transition-all ${!selectedStoreId
                     ? 'border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed'
                     : loadingProducts
-                    ? 'border-amber-200 bg-amber-50/40 text-slate-500 cursor-wait'
-                    : fieldErrors.product_id
-                    ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500 bg-rose-50/20 cursor-pointer'
-                    : 'border-slate-300 focus:ring-amber-500/20 focus:border-amber-500 bg-white text-slate-900 cursor-pointer'
-                }`}
+                      ? 'border-amber-200 bg-amber-50/40 text-slate-500 cursor-wait'
+                      : fieldErrors.product_id
+                        ? 'border-rose-300 focus:ring-rose-500/20 focus:border-rose-500 bg-rose-50/20 cursor-pointer'
+                        : 'border-slate-300 focus:ring-amber-500/20 focus:border-amber-500 bg-white text-slate-900 cursor-pointer'
+                  }`}
               >
                 <option value="">
                   {!selectedStoreId
                     ? 'Select a store first...'
                     : loadingProducts
-                    ? 'Loading products...'
-                    : products.length === 0
-                    ? 'No products available for this tier'
-                    : `-- Choose Product (${products.length} available) --`}
+                      ? 'Loading products...'
+                      : products.length === 0
+                        ? 'No products available for this tier'
+                        : `-- Choose Product (${products.length} available) --`}
                 </option>
                 {products.map((prod) => (
                   <option key={prod.id} value={prod.id}>

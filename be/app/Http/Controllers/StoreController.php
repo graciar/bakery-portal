@@ -6,6 +6,7 @@ use App\Models\Store;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\Product;
 
 class StoreController extends Controller
 {
@@ -14,7 +15,7 @@ class StoreController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Store::with('tier');
+        $query = Store::with('tier:id,name');
 
         if ($request->filled('search')) {
             $search = (string) $request->input('search');
@@ -72,9 +73,13 @@ class StoreController extends Controller
     /**
      * Display the specified store.
      */
-    public function show(Store $store): JsonResponse
+    public function show(Request $request, Store $store): JsonResponse
     {
-        $store->load(['tier', 'entries.product']);
+        $store->load('tier:id,name');
+
+        if ($request->boolean('entries')) {
+            $store->load('entries.product');
+        }
 
         return response()->json($store);
     }
@@ -116,8 +121,8 @@ class StoreController extends Controller
      */
     public function products(Store $store): JsonResponse
     {
-        $products = \App\Models\Product::where('tier_id', $store->tier_id)
-            ->with('tier')
+        $products = Product::where('tier_id', $store->tier_id)
+            ->with('tier:id,name')
             ->orderBy('name')
             ->get();
 

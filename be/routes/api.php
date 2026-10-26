@@ -15,5 +15,4 @@ Route::get('stores/{store}/products', [StoreController::class, 'products']);
 Route::apiResource('products', ProductController::class);
 Route::apiResource('stores', StoreController::class);
 Route::apiResource('entries', EntryController::class);
-Route::apiResource('submissions', EntryController::class);
 Route::apiResource('tiers', TierController::class)->only(['index', 'show']);

@@ -14,7 +14,7 @@ class ProductController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Product::with('tier');
+        $query = Product::with('tier:id,name');
 
         if ($request->filled('search')) {
             $search = (string) $request->input('search');
@@ -64,9 +64,13 @@ class ProductController extends Controller
     /**
      * Display the specified product.
      */
-    public function show(Product $product): JsonResponse
+    public function show(Request $request, Product $product): JsonResponse
     {
-        $product->load(['tier', 'entries.store']);
+        $product->load('tier:id,name');
+
+        if ($request->boolean('entries')) {
+            $product->load('entries.store');
+        }
 
         return response()->json($product);
     }
@@ -85,7 +89,7 @@ class ProductController extends Controller
         ]);
 
         $product->update($validated);
-        $product->load('tier');
+        $product->load('tier:id,name');
 
         return response()->json($product);
     }

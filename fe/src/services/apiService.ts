@@ -25,7 +25,7 @@ export class ApiError extends Error {
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`
   let url = `${API_BASE}${cleanEndpoint}`
-  
+
   const headers = new Headers(options.headers || {})
   headers.set('Accept', 'application/json')
   if (options.body && !(options.body instanceof FormData)) {
@@ -147,41 +147,24 @@ export async function getSubmissions(params?: GetSubmissionsParams): Promise<Sub
   }
 
   const queryString = query.toString() ? `?${query.toString()}` : ''
-  try {
-    const data = await request<Submission[] | { data: Submission[] }>(`/submissions${queryString}`)
-    return Array.isArray(data) ? data : data.data || []
-  } catch (err: any) {
-    if (err.status === 404) {
-      const fallback = await request<Submission[] | { data: Submission[] }>(`/entries${queryString}`)
-      return Array.isArray(fallback) ? fallback : fallback.data || []
-    }
-    throw err
-  }
+  const data = await request<Submission[] | { data: Submission[] }>(`/entries${queryString}`)
+  return Array.isArray(data) ? data : data.data || []
 }
 
 /**
  * Submit a customer entry
  */
 export async function createSubmission(payload: CreateSubmissionPayload): Promise<Submission> {
-  try {
-    return await request<Submission>('/submissions', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-  } catch (err: any) {
-    if (err.status === 404) {
-      return await request<Submission>('/entries', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: payload.customer_name,
-          customer_name: payload.customer_name,
-          store_id: payload.store_id,
-          product_id: payload.product_id,
-        }),
-      })
-    }
-    throw err
+  const body = {
+    name: payload.name || payload.customer_name,
+    store_id: payload.store_id,
+    product_id: payload.product_id,
   }
+
+  return await request<Submission>('/entries', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
 }
 
 /**
@@ -192,39 +175,20 @@ export async function updateSubmission(
   payload: Partial<CreateSubmissionPayload>
 ): Promise<Submission> {
   const body = {
-    name: payload.name || payload.customer_name,
-    customer_name: payload.customer_name || payload.name,
+    name: payload.name,
     store_id: payload.store_id,
     product_id: payload.product_id,
   }
 
-  try {
-    return await request<Submission>(`/submissions/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(body),
-    })
-  } catch (err: any) {
-    if (err.status === 404) {
-      return await request<Submission>(`/entries/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(body),
-      })
-    }
-    throw err
-  }
+  return await request<Submission>(`/entries/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  })
 }
 
 /**
  * Delete a submission by ID
  */
 export async function deleteSubmission(id: number | string): Promise<void> {
-  try {
-    await request<void>(`/submissions/${id}`, { method: 'DELETE' })
-  } catch (err: any) {
-    if (err.status === 404) {
-      await request<void>(`/entries/${id}`, { method: 'DELETE' })
-      return
-    }
-    throw err
-  }
+  await request<void>(`/entries/${id}`, { method: 'DELETE' })
 }
